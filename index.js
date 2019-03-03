@@ -12,7 +12,6 @@ let urlArray = res.map(x => x[TARGET_INDEX])
 
 const getInfo = async (browser, url) => {
   let page = await browser.newPage();
-
   await page.setRequestInterception(true);
 
   page.on('request', (req) => {
@@ -26,24 +25,41 @@ const getInfo = async (browser, url) => {
   await page.goto(url);
   const title = await page.title()
   const h1s = await page.$$('h1');
-  const h1 = h1s[1];
+  const h1 = h1s[0];
+  const checkDescriptions = await page.$$("head > meta[name='description']");
+  const checkDescription = checkDescriptions[0];
+  const checkOgDescriptions = await page.$$("head > meta[property='og:description']");
+  const checkOgDescription = checkOgDescriptions[0];
+
   //Descriptionの取得
+  if (checkDescription == undefined){
+    if(checkOgDescription == undefined){
+    var descriptionResult = "None";
+    } else {
+      const ogDescription = await page.evaluate(() => {
+        return [document.querySelector('meta[property="og:description"]').getAttribute('content')];
+        });
+          var descriptionResult = ogDescription;
+    }
+  } else { 
   const description = await page.evaluate(() => {
-    return document.getElementsByName('description')[0].content
-  })
-  //End of Descriptionの取得
+  return document.getElementsByName('description')[0].content
+  });
+    var descriptionResult = description;
+  }
+  //End of Description
   //h1の取得
   if (h1 == undefined) {
-    console.log(`h1: None`)
+    var h1Result = "None";
   } else {
   const h1Text = await page.evaluate(el => el.innerText, h1);
-  console.log(`h1: ${h1Text}`)
+    var h1Result = h1Text;
   }
   //End of h1の取得
-
-  console.log(`description : ${description}`)
   console.log(`url: ${url}`)
   console.log(`title: ${title}`)
+  console.log(`description: ${descriptionResult}`)
+  console.log(`h1: ${h1Result}`)
   console.log('-------------------------')
 
   await page.close();
