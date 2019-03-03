@@ -22,7 +22,12 @@ const getInfo = async (browser, url) => {
       req.continue();
     }
   });
+  try {
   await page.goto(url);
+  } catch(e) {
+    let page = await browser.newPage();
+    await page.close();
+  }
   const title = await page.title()
   const h1s = await page.$$('h1');
   const h1 = h1s[0];
@@ -47,7 +52,8 @@ const getInfo = async (browser, url) => {
   });
     var descriptionResult = description;
   }
-  //End of Description
+  //End of Descriptionの取得
+  
   //h1の取得
   if (h1 == undefined) {
     var h1Result = "None";
@@ -61,9 +67,9 @@ const getInfo = async (browser, url) => {
   console.log(`description: ${descriptionResult}`)
   console.log(`h1: ${h1Result}`)
   console.log('-------------------------')
-
   await page.close();
-}
+  }
+
 
 (async () => {
   const browser = await puppeteer.launch({
@@ -79,7 +85,6 @@ const getInfo = async (browser, url) => {
       '--single-process'
     ]
   });
-
   for (const url of urlArray) {
     await getInfo(browser, url)
   }
