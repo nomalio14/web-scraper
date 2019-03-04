@@ -1,0 +1,9 @@
+for-loop: 12688.642ms
+url,Title,description,H1
+https://qiitaaaa.com/,,None,None
+https://qiita.com/tomi_shinwatec/items/a68cf7840c3da002c6e0,puppeteerでスクレイピング - Qiita,"web上の情報を抽出するスクレイピング技術ですが、いままでphantomJSで行っていましたが、chromeがヘッドレスブラウザに対応したとのことで、そのnodeライブラリであるpuppeteerで実践してみました。
+
+## 環境構築...",puppeteerでスクレイピング
+https://www.yahoo.co.jp/,Yahoo! JAPAN,日本最大級のポータルサイト。検索、オークション、ニュース、天気、スポーツ、メール、ショッピングなど多数のサービスを展開。あなたの生活をより豊かにする「課題解決エンジン」を目指していきます。,
+https://www.adways.net/,株式会社アドウェイズ,アドウェイズは、2001年に設立、2006年に東証マザーズ上場を果たしたインターネット広告企業です。現在はアジアを中心とした世界各国にも事業展開をしておりインターネット広告事業や、メディアやアプリの開発・運営事業など、幅広く事業を行っています。,None
+

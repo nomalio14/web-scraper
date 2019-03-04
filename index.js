@@ -2,10 +2,12 @@
 const TARGET_INDEX = 0;
 const puppeteer = require('puppeteer')
 const fs = require('fs');
+const csv = require('csv');
 const csvSync = require('csv-parse/lib/sync'); // requiring sync module
 
 const file = 'input.csv';
 let data = fs.readFileSync(file);
+let items = [];
 
 let res = csvSync(data);
 let urlArray = res.map(x => x[TARGET_INDEX])
@@ -42,7 +44,7 @@ const getInfo = async (browser, url) => {
     var descriptionResult = "None";
     } else {
       const ogDescription = await page.evaluate(() => {
-        return [document.querySelector('meta[property="og:description"]').getAttribute('content')];
+        return document.querySelector('meta[property="og:description"]').getAttribute('content');
         });
           var descriptionResult = ogDescription;
     }
@@ -62,11 +64,12 @@ const getInfo = async (browser, url) => {
     var h1Result = h1Text;
   }
   //End of h1の取得
-  console.log(`url: ${url}`)
-  console.log(`title: ${title}`)
-  console.log(`description: ${descriptionResult}`)
-  console.log(`h1: ${h1Result}`)
-  console.log('-------------------------')
+  console.error(`url: ${url}`)
+  console.error(`title: ${title}`)
+  console.error(`description: ${descriptionResult}`)
+  console.error(`h1: ${h1Result}`)
+  console.error('-------------------------')
+  items.push({url, title, descriptionResult, h1Result});
   await page.close();
   }
 
@@ -85,9 +88,21 @@ const getInfo = async (browser, url) => {
       '--single-process'
     ]
   });
+  var label = 'for-loop';
+  console.time(label);
   for (const url of urlArray) {
     await getInfo(browser, url)
   }
+  console.timeEnd(label);
+  const columns = {
+    url: "url",
+    title: "Title",
+    descriptionResult: "description",
+    h1Result: "H1",
+    };
+  csv.stringify(items, { header: true, columns: columns}, function(err, output){
+  console.log(output);
+  });
   browser.close();
 })();
 
