@@ -103,6 +103,7 @@ const getInfo = async (browser, url) => {
   csv.stringify(items, { header: true, columns: columns}, function(err, output){
   console.log(output);
   });
+
   browser.close();
 })();
 
